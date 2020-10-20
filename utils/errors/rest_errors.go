@@ -2,17 +2,6 @@ package errors
 
 import "net/http"
 
-var (
-	ErrorService errorServiceInterface = &errorRestService{}
-)
-
-type errorRestService struct{}
-
-type errorServiceInterface interface {
-	BadRequestErr(string) *RestErr
-	InternalServerError(string) *RestErr
-	NotFound(string) *RestErr
-}
 
 type RestErr struct {
 	Message string `json:"message"`
@@ -20,7 +9,7 @@ type RestErr struct {
 	Error   string `json:"error"`
 }
 
-func (e *errorRestService) BadRequestErr(msg string) *RestErr {
+func BadRequestErr(msg string) *RestErr {
 	return &RestErr{
 		Message: msg,
 		Status:  http.StatusBadRequest,
@@ -28,7 +17,7 @@ func (e *errorRestService) BadRequestErr(msg string) *RestErr {
 	}
 }
 
-func (e *errorRestService) InternalServerError(msg string) *RestErr {
+func InternalServerError(msg string) *RestErr {
 	return &RestErr{
 		Message: msg,
 		Status:  http.StatusInternalServerError,
@@ -36,7 +25,7 @@ func (e *errorRestService) InternalServerError(msg string) *RestErr {
 	}
 }
 
-func (e *errorRestService) NotFound(msg string) *RestErr {
+func NotFound(msg string) *RestErr {
 	return &RestErr{
 		Message: msg,
 		Status:  http.StatusNotFound,
