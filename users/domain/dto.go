@@ -27,24 +27,24 @@ type User struct {
 	Status       string             `bson:"status" json:"status"`
 }
 
-func (u *User) Validate() *errors.RestErr {
+func (user *User) Validate() *errors.RestErr {
 
-	if u.Email = strings.TrimSpace(strings.ToLower(u.Email)); u.Email == "" {
+	if user.Email = strings.TrimSpace(strings.ToLower(user.Email)); user.Email == "" {
 		return errors.BadRequestErr("Invalid email")
 	}
 
-	if u.Password == ""{
+	if user.Password == ""{
 		return errors.BadRequestErr("invalid password")
 	}
 
 
-	u.EncryptPassword()
+	user.EncryptPassword()
 
 	return nil
 
 }
 
-func (u *User) EncryptPassword(){
-	hash, _ := bcrypt.GenerateFromPassword([]byte(u.Password), bcrypt.MinCost)
-	u.Password = string(hash)
+func (user *User) EncryptPassword(){
+	hash, _ := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.MinCost)
+	user.Password = string(hash)
 }

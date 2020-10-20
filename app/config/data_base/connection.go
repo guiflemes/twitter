@@ -15,6 +15,7 @@ var (
 	Client *mongo.Client
 )
 
+
 func dbUri() string {
 	err := godotenv.Load()
 	if err != nil {
