@@ -3,6 +3,7 @@ package users
 import (
 	"fmt"
 	"github.com/guiflemes/twitter_clone/app/handlers"
+	"github.com/guiflemes/twitter_clone/users/controller"
 )
 
 var (
@@ -11,10 +12,12 @@ var (
 
 func init() {
 
+	control := controller.UserController
+
 	_ = handlers.Route{
-		Method:  "GET",
+		Method:  "POST",
 		Path:    endPoint,
-		Handler: nil,
+		Handler: control.Create,
 	}
 
 }

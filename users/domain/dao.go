@@ -3,8 +3,10 @@ package domain
 import (
 	"context"
 	"github.com/guiflemes/twitter_clone/app/config/data_base"
+	"github.com/guiflemes/twitter_clone/logger"
 	"github.com/guiflemes/twitter_clone/utils/errors"
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"time"
 )
 
@@ -36,11 +38,15 @@ func (user *User) Create() *errors.RestErr{
 
 	defer cancel()
 
-	_, err := collection.InsertOne(ctx, user)
+	result, err := collection.InsertOne(ctx, user)
 
 	if err != nil{
-
+		logger.Error("error trying to save a new user", err)
+		return errors.InternalServerError("database error")
 	}
+
+	oid, _ := result.InsertedID.(primitive.ObjectID)
+	user.ID = oid
 
 	return nil
 }
