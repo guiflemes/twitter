@@ -10,14 +10,15 @@ var (
 	endPoint = fmt.Sprintf("%s/users/", handlers.ApiVersion)
 )
 
-func init() {
-
+func RegisterUrls() {
 	control := controller.UserController
 
-	_ = handlers.Route{
+	createUser := handlers.Route{
 		Method:  "POST",
 		Path:    endPoint,
 		Handler: control.Create,
 	}
+
+	handlers.RegisterRouter(createUser)
 
 }

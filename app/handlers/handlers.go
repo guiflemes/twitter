@@ -1,6 +1,5 @@
 package handlers
 
-//https://stackoverflow.com/questions/19356619/how-do-i-split-urls-in-multiple-files-using-gorilla-mux
 import (
 	"fmt"
 	"github.com/gorilla/mux"
@@ -18,18 +17,21 @@ type Route struct {
 }
 
 var (
-	ApiVersion = "v2"
-	routes = make([]Route, 0)
+	ApiVersion = "v1"
+	routes     = make([]Route, 0)
 )
 
-func RegisterRouter(r Route){
+func RegisterRouter(r Route) {
 	routes = append(routes, r)
 }
 
 func Handlers() {
+
 	router := mux.NewRouter()
 
-	//router.HandleFunc("/register", middlew.CheckDB()).Methods("POST")
+	for _, rt := range routes {
+		router.HandleFunc(rt.Path, rt.Handler).Methods(rt.Method)
+	}
 
 	PORT := os.Getenv("PORT")
 
@@ -39,7 +41,8 @@ func Handlers() {
 
 	handler := cors.AllowAll().Handler(router)
 
-	logger.Info("Application is about to begin")
+	server := fmt.Sprintf("http://127.0.0.1.%s/", PORT)
+	logger.Info(fmt.Sprintf("Starting development server at %s", server))
 
 	log.Fatal(http.ListenAndServe(
 		fmt.Sprintf(":%s", PORT), handler))
