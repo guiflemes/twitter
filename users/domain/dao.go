@@ -23,7 +23,7 @@ func (user *User) CheckUSerExist() bool{
 
 	query := bson.M{"email": user.Email}
 
-	err := collection.FindOne(ctx, query)
+	err := collection.FindOne(ctx, query).Decode(&user)
 
 	if err != nil{
 		return false

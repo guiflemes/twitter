@@ -2,6 +2,7 @@ package controller
 
 import (
 	"encoding/json"
+	"github.com/guiflemes/twitter_clone/logger"
 	"github.com/guiflemes/twitter_clone/users/domain"
 	"github.com/guiflemes/twitter_clone/users/service"
 	"github.com/guiflemes/twitter_clone/utils/errors"
@@ -24,7 +25,8 @@ func (u *userController) Create(w http.ResponseWriter, r *http.Request) {
 
 	err := json.NewDecoder(r.Body).Decode(&user)
 	if err != nil {
-		requestErr := errors.BadRequestErr("invalid Json body")
+		requestErr := errors.BadRequestErr("invalid json body")
+		logger.Error("invalid json body", err)
 		http_utils.ResponseError(w, *requestErr)
 		return
 	}

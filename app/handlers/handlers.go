@@ -3,7 +3,7 @@ package handlers
 import (
 	"fmt"
 	"github.com/gorilla/mux"
-	"github.com/guiflemes/twitter_clone/logger"
+	_"github.com/guiflemes/twitter_clone/logger"
 	"github.com/rs/cors"
 	"log"
 	"net/http"
@@ -17,7 +17,6 @@ type Route struct {
 }
 
 var (
-	ApiVersion = "v1"
 	routes     = make([]Route, 0)
 )
 
@@ -30,7 +29,7 @@ func Handlers() {
 	router := mux.NewRouter()
 
 	for _, rt := range routes {
-		router.HandleFunc(rt.Path, rt.Handler).Methods(rt.Method)
+		router.HandleFunc("/" + rt.Path, rt.Handler).Methods(rt.Method)
 	}
 
 	PORT := os.Getenv("PORT")
@@ -40,9 +39,6 @@ func Handlers() {
 	}
 
 	handler := cors.AllowAll().Handler(router)
-
-	server := fmt.Sprintf("http://127.0.0.1.%s/", PORT)
-	logger.Info(fmt.Sprintf("Starting development server at %s", server))
 
 	log.Fatal(http.ListenAndServe(
 		fmt.Sprintf(":%s", PORT), handler))

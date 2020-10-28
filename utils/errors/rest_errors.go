@@ -25,10 +25,18 @@ func InternalServerError(msg string) *RestErr {
 	}
 }
 
-func NotFound(msg string) *RestErr {
+func NotFoundError(msg string) *RestErr {
 	return &RestErr{
 		Message: msg,
 		Status:  http.StatusNotFound,
-		Error:   "not_found",
+		Error:   "not_found_error",
+	}
+}
+
+func ForbiddenError(msg string) *RestErr{
+	return &RestErr{
+		Message: msg,
+		Status: http.StatusForbidden,
+		Error: "forbidden_error",
 	}
 }

@@ -48,3 +48,17 @@ func (user *User) EncryptPassword(){
 	hash, _ := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.MinCost)
 	user.Password = string(hash)
 }
+
+
+func (user *User) AuthorizedLogin(password string) *errors.RestErr{
+
+	inputPassword := []byte(password)
+
+	err := bcrypt.CompareHashAndPassword([]byte(user.Password), inputPassword)
+
+	if err != nil{
+		return errors.ForbiddenError("invalid credentials to email or password")
+	}
+
+	return nil
+}

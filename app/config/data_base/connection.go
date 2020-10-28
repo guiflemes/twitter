@@ -15,7 +15,6 @@ var (
 	Client *mongo.Client
 )
 
-
 func dbUri() string {
 	err := godotenv.Load()
 	if err != nil {
@@ -41,8 +40,6 @@ func init() {
 		logger.Error("Pong err", err)
 		panic(err)
 	}
-
-	logger.Info("Data-Base connection successfully")
 
 }
 

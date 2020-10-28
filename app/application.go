@@ -14,5 +14,8 @@ func StartApp() {
 		return
 	}
 
+	logger.Info("Application is about to begin")
+
 	handlers.Handlers()
+
 }
