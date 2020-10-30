@@ -4,17 +4,26 @@ import (
 	"github.com/guiflemes/twitter_clone/app/handlers"
 	"github.com/guiflemes/twitter_clone/users/controller"
 	"net/http"
+
 )
 
 func RegisterUrls() {
-	control := controller.UserController
+	userController := controller.UserController
 
 	createUser := handlers.Route{
 		Method:  http.MethodPost,
 		Path:    "api/v1/users/",
-		Handler: control.Create,
+		Handler: userController.Create,
 	}
 
-	handlers.RegisterRouter(createUser)
+	sessionController := controller.SessionController
+
+	login := handlers.Route{
+		Method:  http.MethodPost,
+		Path:    "api/v1/login/",
+		Handler: sessionController.Login,
+	}
+
+	handlers.RegisterRouter(createUser, login)
 
 }

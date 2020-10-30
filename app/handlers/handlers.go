@@ -20,8 +20,11 @@ var (
 	routes     = make([]Route, 0)
 )
 
-func RegisterRouter(r Route) {
-	routes = append(routes, r)
+//Register a list or single a single route
+func RegisterRouter(rs ...Route) {
+	for _, r := range rs{
+		routes = append(routes, r)
+	}
 }
 
 func Handlers() {

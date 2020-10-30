@@ -1,6 +1,7 @@
 package domain
 
 import (
+	"github.com/guiflemes/twitter_clone/logger"
 	"github.com/guiflemes/twitter_clone/utils/errors"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"golang.org/x/crypto/bcrypt"
@@ -57,6 +58,7 @@ func (user *User) AuthorizedLogin(password string) *errors.RestErr{
 	err := bcrypt.CompareHashAndPassword([]byte(user.Password), inputPassword)
 
 	if err != nil{
+		logger.Error("password error", err)
 		return errors.ForbiddenError("invalid credentials to email or password")
 	}
 
