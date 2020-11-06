@@ -33,7 +33,7 @@ func (s *sessionService)Login(user domain.User) (*auth.JwtToken, *errors.RestErr
 		return nil, err
 	}
 
-	tokenAsString, err := auth.CreateJWT(user)
+	tokenAsString, err := auth.JWTAuthService().CreateJWT(user)
 
 	if err != nil{
 		return nil, errors.BadRequestErr("error creating a token")

@@ -8,6 +8,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"github.com/guiflemes/twitter_clone/app/middleware"
 )
 
 type Route struct {
@@ -32,7 +33,7 @@ func Handlers() {
 	router := mux.NewRouter()
 
 	for _, rt := range routes {
-		router.HandleFunc("/" + rt.Path, rt.Handler).Methods(rt.Method)
+		router.HandleFunc("/" + rt.Path, middleware.CheckDB(rt.Handler)).Methods(rt.Method)
 	}
 
 	PORT := os.Getenv("PORT")
