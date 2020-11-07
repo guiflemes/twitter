@@ -1,1 +1,1 @@
-It's a back-end solution to a ````twitter clone
+It's a back-end solution to a twitter clone
