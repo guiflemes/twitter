@@ -1,7 +1,5 @@
 package auth
 
-
-
 import (
 	"fmt"
 	"github.com/dgrijalva/jwt-go"
@@ -78,12 +76,10 @@ func (service *jwtService) CreateJWT(user domain.User) (string, error) {
 
 func (service *jwtService) ValidateToken(encodedToken string) (*jwt.Token, error) {
 	return jwt.ParseWithClaims(
-		encodedToken, &claim{}, func(token *jwt.Token) (interface{}, error){
-			if _, isvalid := token.Method.(*jwt.SigningMethodHMAC); !isvalid{
+		encodedToken, &claim{}, func(token *jwt.Token) (interface{}, error) {
+			if _, isvalid := token.Method.(*jwt.SigningMethodHMAC); !isvalid {
 				return nil, fmt.Errorf("invalid token")
 			}
 			return []byte(service.secretKey), nil
-	})
+		})
 }
-
-//https://medium.com/wesionary-team/jwt-authentication-in-golang-with-gin-63dbc0816d55
