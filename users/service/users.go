@@ -22,7 +22,7 @@ func (u *userService) Create(user domain.User) (*domain.User, *errors.RestErr) {
 		return nil, err
 	}
 
-	if user.CheckUSerExist() {
+	if user.CheckUserExist() {
 		return nil, errors.BadRequestErr("User already exists")
 	}
 

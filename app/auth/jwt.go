@@ -1,5 +1,7 @@
 package auth
 
+
+
 import (
 	"fmt"
 	"github.com/dgrijalva/jwt-go"
@@ -12,19 +14,19 @@ import (
 	"time"
 )
 
-type jwtToken interface {
+type JwtService interface {
 	CreateJWT(domain.User) (string, error)
 	ValidateToken(string) (*jwt.Token, error)
 }
 
-type Claim struct {
+type claim struct {
 	Password string             `json:"password"`
 	ID       primitive.ObjectID `bson:"_id" json:"id, omitempty"`
 	jwt.StandardClaims
 }
 
 type JwtToken struct {
-	TokenAsString string `json:"token, omitempty"`
+	AccessToken string `json:"access_token"`
 }
 
 type jwtService struct {
@@ -32,7 +34,7 @@ type jwtService struct {
 	issure    string
 }
 
-func JWTAuthService() *jwtService {
+func JWTAuthService() JwtService {
 	return &jwtService{
 		secretKey: getSecretKey(),
 		issure:    "Bikash",
@@ -45,6 +47,7 @@ func getSecretKey() string {
 		log.Fatal("Error loading .env file")
 	}
 	return os.Getenv("SECRET_KEY")
+
 }
 
 func (service *jwtService) CreateJWT(user domain.User) (string, error) {
@@ -75,10 +78,12 @@ func (service *jwtService) CreateJWT(user domain.User) (string, error) {
 
 func (service *jwtService) ValidateToken(encodedToken string) (*jwt.Token, error) {
 	return jwt.ParseWithClaims(
-		encodedToken, &Claim{}, func(token *jwt.Token) (interface{}, error){
+		encodedToken, &claim{}, func(token *jwt.Token) (interface{}, error){
 			if _, isvalid := token.Method.(*jwt.SigningMethodHMAC); !isvalid{
 				return nil, fmt.Errorf("invalid token")
 			}
 			return []byte(service.secretKey), nil
 	})
 }
+
+//https://medium.com/wesionary-team/jwt-authentication-in-golang-with-gin-63dbc0816d55

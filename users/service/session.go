@@ -1,7 +1,6 @@
 package service
 
 import (
-	"github.com/guiflemes/twitter_clone/app/auth"
 	"github.com/guiflemes/twitter_clone/users/domain"
 	"github.com/guiflemes/twitter_clone/utils/errors"
 )
@@ -13,37 +12,25 @@ var (
 type sessionService struct {}
 
 type sessionServiceInterface interface {
-	Login(user domain.User) (*auth.JwtToken, *errors.RestErr)
+	Login(user *domain.User) (bool, *errors.RestErr)
 }
 
-func (s *sessionService)Login(user domain.User) (*auth.JwtToken, *errors.RestErr){
+func (s *sessionService) Login(user *domain.User) (bool, *errors.RestErr){
 
 	passwordAsString := user.Password
 
 	if err := user.Validate(); err != nil {
-		return nil, err
+		return false, err
 	}
 
-
-	if ! user.CheckUSerExist() {
-		return nil, errors.BadRequestErr("User doest not exists")
+	if ! user.CheckUserExist() {
+		return false, errors.BadRequestErr("User doest not exists")
 	}
 
 	if err := user.AuthorizedLogin(passwordAsString); err != nil{
-		return nil, err
+		return false, err
 	}
 
-	tokenAsString, err := auth.JWTAuthService().CreateJWT(user)
-
-	if err != nil{
-		return nil, errors.BadRequestErr("error creating a token")
-	}
-
-
-	token := auth.JwtToken{
-		TokenAsString: tokenAsString,
-	}
-
-	return &token, nil
+	return true, nil
 
 }

@@ -16,7 +16,7 @@ var (
 	collection = db.Collection("user")
 )
 
-func (user *User) CheckUSerExist() bool{
+func (user *User) CheckUserExist() bool{
 	ctx, cancel := context.WithTimeout(context.Background(), 15*time.Second)
 
 	defer cancel()

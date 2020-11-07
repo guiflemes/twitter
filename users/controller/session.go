@@ -2,6 +2,7 @@ package controller
 
 import (
 	"encoding/json"
+	"github.com/guiflemes/twitter_clone/app/auth"
 	"github.com/guiflemes/twitter_clone/logger"
 	"github.com/guiflemes/twitter_clone/users/domain"
 	"github.com/guiflemes/twitter_clone/users/service"
@@ -33,13 +34,18 @@ func (s *sessionController)Login(w http.ResponseWriter, r *http.Request){
 		return
 	}
 
-	token, tokenErr := service.SessionService.Login(user)
+	isUserAuthenticated, errAuthenticated := service.SessionService.Login(&user)
+
+	if !isUserAuthenticated{
+		http_utils.ResponseError(w, *errAuthenticated)
+	}
+
+	tokenAsString, tokenErr := auth.JWTAuthService().CreateJWT(user)
 
 	if tokenErr != nil{
-		http_utils.ResponseError(w, *tokenErr)
+		http_utils.ResponseError(w, *errors.BadRequestErr("Not allowed"))
 		return
 	}
 
-	http_utils.ResponseJson(w, http.StatusOK, token)
-
+	http_utils.ResponseJson(w, http.StatusOK, auth.JwtToken{AccessToken: tokenAsString})
 }
