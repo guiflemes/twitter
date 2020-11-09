@@ -4,6 +4,7 @@ import (
 	"context"
 	"github.com/guiflemes/twitter_clone/app/config/data_base"
 	"github.com/guiflemes/twitter_clone/logger"
+	"github.com/guiflemes/twitter_clone/utils/date"
 	"github.com/guiflemes/twitter_clone/utils/errors"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -32,6 +33,8 @@ func (user *User) CheckUserExist() bool {
 }
 
 func (user *User) Create() *errors.RestErr {
+
+	user.CreatedAt = date.GetNowAsString()
 
 	ctx, cancel := context.WithTimeout(context.Background(), 15*time.Second)
 

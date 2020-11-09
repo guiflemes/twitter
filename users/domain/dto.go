@@ -26,6 +26,7 @@ type User struct {
 	Location     string             `bson:"location" json:"location,omitempty"`
 	WebSite      string             `bson:"web_site" json:"web_site,omitempty"`
 	Status       string             `bson:"status" json:"status"`
+	CreatedAt    string             `bson:"created_at" json:"created_at"`
 }
 
 func (user *User) Validate() *errors.RestErr {
@@ -34,10 +35,9 @@ func (user *User) Validate() *errors.RestErr {
 		return errors.BadRequestErr("Invalid email")
 	}
 
-	if user.Password == ""{
+	if user.Password == "" {
 		return errors.BadRequestErr("invalid password")
 	}
-
 
 	user.EncryptPassword()
 
@@ -45,19 +45,18 @@ func (user *User) Validate() *errors.RestErr {
 
 }
 
-func (user *User) EncryptPassword(){
+func (user *User) EncryptPassword() {
 	hash, _ := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.MinCost)
 	user.Password = string(hash)
 }
 
-
-func (user *User) AuthorizedLogin(password string) *errors.RestErr{
+func (user *User) AuthorizedLogin(password string) *errors.RestErr {
 
 	inputPassword := []byte(password)
 
 	err := bcrypt.CompareHashAndPassword([]byte(user.Password), inputPassword)
 
-	if err != nil{
+	if err != nil {
 		logger.Error("password error", err)
 		return errors.ForbiddenError("invalid credentials to email or password")
 	}
